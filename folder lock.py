@@ -84,14 +84,20 @@ def decrypt_folder():
         
         print("Available encrypted files before decryption:", os.listdir(folder_path))  # Debugging
 
+        decrypted_files = []
         for file in os.listdir(folder_path):
             file_path = os.path.join(folder_path, file)
             if file_path.endswith(".aes"):
                 decrypted_file = file_path.replace(".aes", "")
                 pyAesCrypt.decryptFile(file_path, decrypted_file, password, BUFFER_SIZE)
                 os.remove(file_path)  # Remove encrypted file after decryption
+                decrypted_files.append(decrypted_file)
         
-        messagebox.showinfo("Success", "Folder decrypted and unlocked successfully!")
+        if decrypted_files:
+            print("Decrypted files:", decrypted_files)
+            messagebox.showinfo("Success", "Folder decrypted and unlocked successfully!")
+        else:
+            messagebox.showerror("Error", "No files were decrypted. Check encryption settings.")
     except Exception as e:
         messagebox.showerror("Error", f"Decryption failed: {e}")
 
